@@ -151,7 +151,7 @@ export default {
       }).then(() => {
         const formData = pick(data, ['no', 'callNo', 'status', 'description', 'updatedAt'])
         formData.updatedAt = moment(data.updatedAt)
-        console.log('formData', formData)
+        console.log('gridData', formData)
         form.setFieldsValue(formData)
       })
     }

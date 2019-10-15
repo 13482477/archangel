@@ -322,6 +322,45 @@ export const asyncRouterMap = [
             ]
           }
         ]
+      },
+      // {
+      //   path: '/system',
+      //   name: 'system',
+      //   component: PageView,
+      //   meta: { title: '系统管理', icon: 'slack', permission: [ 'dashboard' ] },
+      //   redirect: '/system/FormDesign',
+      //   children: [
+      //     {
+      //       path: '/system/FormDesign',
+      //       name: 'FormDesign',
+      //       component: () => import('@/views/system/FormDesigner'),
+      //       meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: [ 'dashboard' ] }
+      //     }
+      //   ]
+      // },
+      {
+        path: '/system',
+        name: 'system',
+        component: RouteView,
+        meta: { title: '系统管理', icon: 'slack', permission: [ 'dashboard' ] },
+        redirect: '/system/form/FormDesign',
+        children: [
+          {
+            path: '/system/form',
+            name: 'FormManagement',
+            meta: { title: '表单管理', icon: 'tool', permission: [ 'dashboard' ] },
+            component: RouteView,
+            redirect: '/system/form/FormDesign',
+            children: [
+              {
+                path: '/system/form/FormDesign',
+                name: 'FormDesign',
+                component: () => import('@/views/system/FormDesign'),
+                meta: { title: '表单设计', icon: 'tool', keepAlive: true, permission: [ 'dashboard' ] }
+              }
+            ]
+          }
+        ]
       }
     ]
   },
