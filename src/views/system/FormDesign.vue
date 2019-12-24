@@ -4,23 +4,33 @@
       <div class="leftSide">
         <a-tabs type="line" :animated="true">
           <a-tab-pane tab="控件" key="widget">
-            <div class="attributeContainer">
-              <div style="font-weight: bold; font-color: #000000">表单控件</div>
-              <div style="width: 100%; margin-top: 10px;">
-                <ul>
-                  <li
-                    v-for="(widget, i) in widgetList"
-                    :key="i"
-                    :widgetid="widget.type"
-                    draggable="true"
-                    @dragstart="onDragstart(widget.type)"
-                    @dragend="onDragend"
-                  >
-                    <label>{{ widget.name }}</label>
-                  </li>
-                </ul>
+            <a-row>
+              <div class="attributeContainer">
+                <div style="font-weight: bold; font-color: #000000">表单控件</div>
+                <div style="width: 100%; margin-top: 10px;">
+                  <ul>
+                    <li
+                      v-for="(widget, i) in widgetList"
+                      :key="i"
+                      :widgetid="widget.type"
+                      draggable="true"
+                      @dragstart="onDragstart(widget.type)"
+                      @dragend="onDragend"
+                    >
+                      <label>{{ widget.name }}</label>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
+            </a-row>
+            <a-row style="margin-top: 20px;">
+              <div class="attributeContainer">
+                <div style="font-weight: bold; font-color: #000000">表单名称</div>
+                <div style="width: 100%; margin-top: 10px;">
+                  <a-input v-model="formName" />
+                </div>
+              </div>
+            </a-row>
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -79,7 +89,7 @@
           <a-button type="primary" size="large" icon="plus" style="width: 100%" @click="addRow()">添加列</a-button>
         </a-row>
         <a-row style="margin-top: 5px; text-align: right">
-          <a-button type="primary" size="large" @click="addRow()" style="width: 100%">保存</a-button>
+          <a-button type="primary" size="large" @click="save()" style="width: 100%">保存</a-button>
         </a-row>
         <div style="width: 100%">
           <div style="width: 50%; display: inline-block; vertical-align: top;">
@@ -126,7 +136,7 @@
           行数:
         </a-col>
         <a-col :span="modal.widgetSpan">
-          <a-input-number v-model="modal.rows" />
+          <a-input-number v-model="modal.multiText.rows" />
         </a-col>
       </a-row>
       <a-row v-if="modal.type === 'radio'" class="modalRowGap modalLineHeight">
@@ -310,6 +320,7 @@ export default {
         rowIndex: 0,
         colIndex: 0
       },
+      formName: '',
       gridData: [],
       modal: {
         labelSpan: 8,
@@ -474,6 +485,13 @@ export default {
     },
     cleanCell (rowIndex, colIndex) {
       this.$set(this.gridData[rowIndex], colIndex, {})
+    },
+    async save () {
+      const resp = await this.$http.post('http://localhost:9800/form', {
+        formName: this.formName,
+        formData: JSON.stringify(this.gridData)
+      })
+      console.log(resp)
     }
   },
   computed: {
